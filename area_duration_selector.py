@@ -234,7 +234,7 @@ def area_duration_selector(area_of_interest, duration_of_interest, storm_stats, 
     # compute the average precipitation within the time window of the target duration
     rolling_mean = storm_stats.rolling(duration_of_interest).mean()
     # sort the rolling mean
-    sorted_rolling_mean = rolling_mean[sbasin_name + "area_avg_mtpr(mm/h)"].sort_values(ascending=False)
+    sorted_rolling_mean = rolling_mean[sbasin_name + "_area_avg_mtpr(mm/h)"].sort_values(ascending=False)
     # drop nan
     sorted_rolling_mean.dropna(axis=0, how='any', inplace=True)
 

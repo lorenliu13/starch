@@ -594,7 +594,7 @@ if __name__ == "__main__":
     save_loc = "hourly_catalog"
     make_folder(save_loc)
     # load tracking data
-    tracked_storm_loc = "tracking_array.npy"
+    tracked_storm_loc = "storm_tracking_results/tracking_array.npy"
     track_storms = np.load(tracked_storm_loc, allow_pickle=True)
     # load precipitation data
     raw_data_folder = "era5_data"

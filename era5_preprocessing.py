@@ -60,7 +60,7 @@ def mean_rate_data_preprocessing(file_location, save_location):
 
 
 if __name__ == "__main__":
-    # add the file name
+    # NOT RUN:
     # note that the file folder and file name should be customized based on downloaded ERA5 data, which are not provided
     # in the code examples
     raw_data_folder = r"E:\Atmosphere\Processed_data\ERA5\ERA5_single_level\1H\2019"
