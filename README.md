@@ -3,7 +3,7 @@ STARCH computes regional extreme storm physical and moisture balance characteris
 
 ## Installation
 
-'git clone https://github/DUTLiuKevin/starch.git'
+`git clone https://github/lorenliu13/starch.git`
 
 ## Dependencies
 |Name|Version|
