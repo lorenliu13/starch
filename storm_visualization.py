@@ -4,7 +4,7 @@ import identification
 import tracking
 from tqdm import tqdm
 import matplotlib.pyplot as plt
-from matplotlib.colors import BoundaryNorm, LinearSegmentedColormap, ListedColormap
+from matplotlib.colors import BoundaryNorm
 import matplotlib.patches as patches
 from PIL import Image
 
