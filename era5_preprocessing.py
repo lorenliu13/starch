@@ -27,8 +27,7 @@ def time_difference(file_location, save_location):
     # save the new time derivative data to xarray
     xarray[short_name].data = xarray_grad
     xarray[short_name].attrs['units'] = 'mm/hour'
-    xarray[short_name].attrs['long_name'] = 'dw/dt'
-    # rename xarray short name from tcwv to dwdt
+    xarray[short_name].attrs['long_name'] = 'dw/dt'    # rename xarray short name from tcwv to dwdt
     xarray = xarray.rename({'tcwv': "dwdt"})
     # save the xarray
     xarray.to_netcdf(save_location, encoding = {"dwdt":{"dtype" : "float32"}})

@@ -16,8 +16,7 @@ from datetime import datetime
 from tqdm import tqdm
 
 
-def track(grown_array: np.ndarray, prcp_array: np.ndarray, ratio_threshold: float,
-          max_distance: float, dry_spell_time: int):
+def track(grown_array: np.ndarray, prcp_array: np.ndarray, ratio_threshold: float, dry_spell_time: int):
     """
     Storm tracking method that labels consecutive storms over time with the same integer labels. The code is modified
     based on github project Storm Tracking and Evaluation Protocol (https://github.com/RDCEP/STEP,
@@ -25,7 +24,6 @@ def track(grown_array: np.ndarray, prcp_array: np.ndarray, ratio_threshold: floa
     :param grown_array: Result array from storm identification with dimension of (time, lon, lat).
     :param prcp_array: Raw precipitation field with dimension of (time, lon, lat).
     :param ratio_threshold: Threshold of overlapping ratio, default is 0.3.
-    :param max_distance: Threshold of storm centroid distance between two time steps, default is 15 pixels.
     :param dry_spell_time: Allow method to match storm at the time step of (t-1-dry_spell_time), if no match is found at
     t-1 step, default is 0.
     :return:
@@ -80,7 +78,7 @@ def track(grown_array: np.ndarray, prcp_array: np.ndarray, ratio_threshold: floa
                         max_size, best_matched_storm = storm_match(result_data, prcp_array, max_size,
                                                                    best_matched_storm, time_index, back_step,
                                                                    current_label, curr_size, curr_centroid,
-                                                                   ratio_threshold, max_distance)
+                                                                   ratio_threshold)
                         # if find a match, stop current loop
                         if max_size:
                             break
@@ -90,7 +88,7 @@ def track(grown_array: np.ndarray, prcp_array: np.ndarray, ratio_threshold: floa
                     max_size, best_matched_storm = storm_match(result_data, prcp_array, max_size,
                                                                best_matched_storm, time_index, back_step,
                                                                current_label, curr_size, curr_centroid,
-                                                               ratio_threshold, max_distance)
+                                                               ratio_threshold)
                 # if we found matches
                 if max_size:
                     # link the label in the current time slice with the appropriate storm label in the previous
@@ -130,7 +128,7 @@ def magnitude(vector: np.ndarray) -> float:
 
 def storm_match(result_data : np.ndarray, prcp_array : np.ndarray, max_size : float,
                 best_matched_storm : int, time_index : int, back_step : int, current_label : int,
-                curr_size : int, curr_centroid : tuple, ratio_threshold : float, max_distance : int):
+                curr_size : int, curr_centroid : tuple, ratio_threshold : float):
     """
     The algorithm that searches the best match previous storm for the current storm.
     :param result_data: Storm identification array.
@@ -143,7 +141,6 @@ def storm_match(result_data : np.ndarray, prcp_array : np.ndarray, max_size : fl
     :param curr_size: Size of the current storm in pixels.
     :param curr_centroid: Centroid of the current storm.
     :param ratio_threshold: Threshold of overlapping ratio
-    :param max_distance: Threshold of max centroid distance.
     :return:
     max_size: The size of the best matched storm.
     best_matched_storm: The label of the best matched storm.
@@ -186,13 +183,13 @@ def storm_match(result_data : np.ndarray, prcp_array : np.ndarray, max_size : fl
             temp_matched_storm = storm
     # if the max overlapping ratio is larger than threshold
     if max_ratio > ratio_threshold:
-        # compute the distance between previous storm and current storm
-        prev_storm_precip = np.where(result_data[time_index - back_step] == temp_matched_storm, prev_precip_data, 0)
-        prev_centroid = center_of_mass(prev_storm_precip)
-        curr_prev_displacement = displacement(curr_centroid, prev_centroid)  # compute displacement vector
-        curr_prev_magnitude = magnitude(curr_prev_displacement)  # compute centroid distance in pixel
-        if curr_prev_magnitude < max_distance:
-            best_matched_storm = temp_matched_storm
-            max_size = prev_size
+
+        # prev_storm_precip = np.where(result_data[time_index - back_step] == temp_matched_storm, prev_precip_data, 0)
+        # prev_centroid = center_of_mass(prev_storm_precip)
+        # curr_prev_displacement = displacement(curr_centroid, prev_centroid)  # compute displacement vector
+        # curr_prev_magnitude = magnitude(curr_prev_displacement)  # compute centroid distance in pixel
+        # if curr_prev_magnitude < max_distance:
+        best_matched_storm = temp_matched_storm
+        max_size = prev_size
 
     return max_size, best_matched_storm
