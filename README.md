@@ -33,8 +33,8 @@ Feel free to open an issue for bugs and feature requests.
 STARCH is released under the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Authors
-* [Yuan Liu]() - *research & developer*
-* [Daniel B. Wright]() - *research*
+* [Yuan Liu](https://her.cee.wisc.edu/group-members/) - *research & developer*
+* [Daniel B. Wright](https://her.cee.wisc.edu/group-members/) - *research*
 
 ## Acknowledgements
-* [Guo Yu]() - *Feature improvement*
+* [Guo Yu](https://www.dri.edu/directory/guo-yu/) - *Feature improvement*
