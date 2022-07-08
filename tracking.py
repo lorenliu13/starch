@@ -16,13 +16,12 @@ from datetime import datetime
 from tqdm import tqdm
 
 
-def track(grown_array: np.ndarray, prcp_array: np.ndarray, ratio_threshold: float, dry_spell_time: int):
+def track(grown_array: np.ndarray, ratio_threshold: float, dry_spell_time: int):
     """
     Storm tracking method that labels consecutive storms over time with the same integer labels. The code is modified
     based on github project Storm Tracking and Evaluation Protocol (https://github.com/RDCEP/STEP,
     author: Alex Rittler.
     :param grown_array: Result array from storm identification with dimension of (time, lon, lat).
-    :param prcp_array: Raw precipitation field with dimension of (time, lon, lat).
     :param ratio_threshold: Threshold of overlapping ratio, default is 0.3.
     :param dry_spell_time: Allow method to match storm at the time step of (t-1-dry_spell_time), if no match is found at
     t-1 step, default is 0.
@@ -41,9 +40,6 @@ def track(grown_array: np.ndarray, prcp_array: np.ndarray, ratio_threshold: floa
 
         # find the labels for this time index and the labeled storms in the previous time index
         current_labels = np.unique(grown_array[time_index])
-
-        # and prepare the corresponding precipitation data
-        curr_precip_data = prcp_array[time_index]
 
         # determine the maximum label already used to avoid collisions
         if time_index == 1:
@@ -64,20 +60,14 @@ def track(grown_array: np.ndarray, prcp_array: np.ndarray, ratio_threshold: floa
                 current_label = np.where(grown_array[time_index] == label, 1, 0)
                 curr_size = np.sum(current_label)
 
-                # find the precipitation data at those locations
-                curr_label_precip = np.where(grown_array[time_index] == label, curr_precip_data, 0)
-
-                # and its intensity weighted centroid
-                curr_centroid = center_of_mass(curr_label_precip)
-
                 # match storms at forward time steps
                 if time_index >= dry_spell_time + 1:
                     # back_step = 1, 2 if dry_spell_time = 1
                     for back_step in np.arange(1, dry_spell_time + 2):
                         # print("Match previous storm at {0}".format(time_index - back_step))
-                        max_size, best_matched_storm = storm_match(result_data, prcp_array, max_size,
+                        max_size, best_matched_storm = storm_match(result_data, max_size,
                                                                    best_matched_storm, time_index, back_step,
-                                                                   current_label, curr_size, curr_centroid,
+                                                                   current_label, curr_size,
                                                                    ratio_threshold)
                         # if find a match, stop current loop
                         if max_size:
@@ -85,9 +75,9 @@ def track(grown_array: np.ndarray, prcp_array: np.ndarray, ratio_threshold: floa
                 else:
                     # if time_index < dry_spell_time
                     back_step = 1
-                    max_size, best_matched_storm = storm_match(result_data, prcp_array, max_size,
+                    max_size, best_matched_storm = storm_match(result_data, max_size,
                                                                best_matched_storm, time_index, back_step,
-                                                               current_label, curr_size, curr_centroid,
+                                                               current_label, curr_size,
                                                                ratio_threshold)
                 # if we found matches
                 if max_size:
@@ -126,20 +116,18 @@ def magnitude(vector: np.ndarray) -> float:
     return sqrt((vector[0] ** 2) + (vector[1] ** 2))
 
 
-def storm_match(result_data : np.ndarray, prcp_array : np.ndarray, max_size : float,
+def storm_match(result_data : np.ndarray, max_size : float,
                 best_matched_storm : int, time_index : int, back_step : int, current_label : int,
-                curr_size : int, curr_centroid : tuple, ratio_threshold : float):
+                curr_size : int, ratio_threshold : float):
     """
     The algorithm that searches the best match previous storm for the current storm.
     :param result_data: Storm identification array.
-    :param prcp_array: Raw precipitation array.
     :param max_size: Current matched storm size.
     :param best_matched_storm: ID of the current best matched storm.
     :param time_index: Current time step.
     :param back_step: Backward step number for storm match. Previous time step = time_index - back_step.
     :param current_label: Label of the current storm.
     :param curr_size: Size of the current storm in pixels.
-    :param curr_centroid: Centroid of the current storm.
     :param ratio_threshold: Threshold of overlapping ratio
     :return:
     max_size: The size of the best matched storm.
@@ -149,7 +137,6 @@ def storm_match(result_data : np.ndarray, prcp_array : np.ndarray, max_size : fl
     prev_size = 0
     # get previous storm ids and prcp data
     previous_storms = np.unique(result_data[time_index - back_step])
-    prev_precip_data = prcp_array[time_index - back_step]
 
     for storm in previous_storms:
         if storm == 0:  # skip the background
