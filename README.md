@@ -1,6 +1,12 @@
 # STARCH (Storm Tracking And Regional CHaracterization)
 STARCH computes regional extreme storm physical and moisture balance characteristics based on spatiotemporal precipitation data from reanlaysis or climate model data. The algorithm is proposed and implemented in (paper) to identify extreme storms and analyze their moisture balance in the Mississippi Basin based on ERA5 reanlaysis data. Detailed description and implementation of the algorithm can be found in the Jupyter Notebook "Example.ipynb".
 
+## Updates
+07/07/2022: A simplified version of storm identification code **identification_simplified.py** is uploaded. 
+The code simplifies the morphological processing steps in its raw version **identification.py** and runs much faster. 
+This code is mainly designed to identify large-scale precipitation systems, e.g., tropical/extra-tropical cyclones, 
+atmospheric rivers, and meso-scale convective systems, but may also be able to serve general storm identification purposes.
+
 ## Installation
 
 `git clone https://github.com/lorenliu13/starch.git`
