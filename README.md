@@ -32,6 +32,11 @@ atmospheric rivers, and meso-scale convective systems, but may also be able to s
 ## Usage
 Introduction and implementation of the codes can be found in "Example.ipynb".
 
+## Citation
+If you use this model in your work, please cite:
+
+*Liu, Yuan, and Daniel B. Wright. “A Storm-Centered Multivariate Modeling of Extreme Precipitation Frequency Based on Atmospheric Water Balance.” Hydrology and Earth System Sciences 26, no. 20 (October 20, 2022): 5241–67. https://doi.org/10.5194/hess-26-5241-2022.*
+
 ## Contributing
 Feel free to open an issue for bugs and feature requests.
 
